@@ -26,7 +26,7 @@ pub struct Fr(pub(crate) [u64; 4]);
 
 /// Constant representing the modulus
 /// r = 0x30644e72e131a029b85045b68181585d2833e84879b9709143e1f593f0000001
-pub const MODULUS: Fr = Fr([
+const MODULUS: Fr = Fr([
     0x43e1f593f0000001,
     0x2833e84879b97091,
     0xb85045b68181585d,
@@ -297,7 +297,22 @@ impl SqrtRatio for Fr {
 mod test {
     use super::*;
     use ff::Field;
+    use rand::SeedableRng;
     use rand_core::OsRng;
+    use rand_xorshift::XorShiftRng;
+
+    #[test]
+    fn test_ser() {
+        let mut rng = XorShiftRng::from_seed([
+            0x59, 0x62, 0xbe, 0x5d, 0x76, 0x3d, 0x31, 0x8d, 0x17, 0xdb, 0x37, 0x32, 0x54, 0x06,
+            0xbc, 0xe5,
+        ]);
+
+        let a0 = Fr::random(&mut rng);
+        let a_bytes = a0.to_bytes();
+        let a1 = Fr::from_bytes(&a_bytes).unwrap();
+        assert_eq!(a0, a1);
+    }
 
     #[test]
     fn test_sqrt() {

@@ -16,6 +16,17 @@ pub fn curve_tests<G: CurveExt>() {
     serdes::<G>();
 }
 
+pub fn curve_tests_bls12_381<G: CurveExt>() {
+    is_on_curve::<G>();
+    equality::<G>();
+    projective_to_affine_affine_to_projective::<G>();
+    projective_addition::<G>();
+    mixed_addition::<G>();
+    multiplication::<G>();
+    batch_normalize::<G>();
+    // serdes::<G>();  // TODO [TEST] [serde] Add support for BLS12_381 G1 & G2
+}
+
 fn serdes<G: CurveExt>() {
     for _ in 0..100 {
         let projective_point = G::random(OsRng);
