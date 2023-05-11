@@ -76,6 +76,13 @@ pub(crate) const fn adc(a: u64, b: u64, carry: bool) -> (u64, bool) {
     a.carrying_add(b, carry)
 }
 
+/// Compute a + b + carry, returning the result and the new carry as a u64.
+#[inline(always)]
+pub(crate) const fn adc_u64(a: u64, b: u64, carry: u64) -> (u64, u64) {
+    let ret = (a as u128) + (b as u128) + (carry as u128);
+    (ret as u64, (ret >> 64) as u64)
+}
+
 /// Compute a - b - borrow, returning the result and the new borrow.
 #[inline(always)]
 pub(crate) const fn sbb(a: u64, b: u64, borrow: bool) -> (u64, bool) {

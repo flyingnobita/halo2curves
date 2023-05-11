@@ -26,7 +26,7 @@ pub struct Fq(pub(crate) [u64; 4]);
 
 /// Constant representing the modulus
 /// q = 0x30644e72e131a029b85045b68181585d97816a916871ca8d3c208c16d87cfd47
-pub const MODULUS: Fq = Fq([
+const MODULUS: Fq = Fq([
     0x3c208c16d87cfd47,
     0x97816a916871ca8d,
     0xb85045b68181585d,
@@ -290,7 +290,21 @@ impl SqrtRatio for Fq {
 mod test {
     use super::*;
     use ff::Field;
-    use rand_core::OsRng;
+    use rand_core::{OsRng, SeedableRng};
+    use rand_xorshift::XorShiftRng;
+
+    #[test]
+    fn test_ser() {
+        let mut rng = XorShiftRng::from_seed([
+            0x59, 0x62, 0xbe, 0x5d, 0x76, 0x3d, 0x31, 0x8d, 0x17, 0xdb, 0x37, 0x32, 0x54, 0x06,
+            0xbc, 0xe5,
+        ]);
+
+        let a0 = Fq::random(&mut rng);
+        let a_bytes = a0.to_bytes();
+        let a1 = Fq::from_bytes(&a_bytes).unwrap();
+        assert_eq!(a0, a1);
+    }
 
     #[test]
     fn test_sqrt_fq() {

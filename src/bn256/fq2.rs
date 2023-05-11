@@ -143,7 +143,7 @@ impl Fq2 {
         )
     }
 
-    /// Converts an element of `Fq` into a byte representation in
+    /// Converts an element of `Fq2` into a byte representation in
     /// little-endian byte order.
     pub fn to_bytes(&self) -> [u8; 64] {
         let mut res = [0u8; 64];
