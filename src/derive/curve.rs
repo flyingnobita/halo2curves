@@ -549,6 +549,13 @@ macro_rules! new_curve_impl {
 
         // Affine implementations
 
+        // Iterator for multiple affine points
+        impl<'a> std::iter::Sum<&'a Self> for $name_affine {
+            fn sum<I>(iter: I) -> $name_affine where I: Iterator<Item = &'a Self> {
+                iter.fold($name_affine::identity(), |acc, x| (acc + x).into())
+            }
+        }
+
         impl std::fmt::Debug for $name_affine {
             fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
                 if self.is_identity().into() {
